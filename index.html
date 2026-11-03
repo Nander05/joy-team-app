@@ -1,0 +1,826 @@
+<!doctype html><html lang="nl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Joy Team"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<title>Joy Team App</title>
+<meta name="theme-color" content="#0C221B">
+
+<style>
+@font-face{font-family:"Anton";font-weight:400;font-style:normal;font-display:swap;src:url(fonts/anton-latin-400-normal.woff2) format("woff2")}
+@font-face{font-family:"DM Sans";font-weight:400;font-style:normal;font-display:swap;src:url(fonts/dm-sans-latin-400-normal.woff2) format("woff2")}
+@font-face{font-family:"DM Sans";font-weight:500;font-style:normal;font-display:swap;src:url(fonts/dm-sans-latin-500-normal.woff2) format("woff2")}
+@font-face{font-family:"DM Sans";font-weight:700;font-style:normal;font-display:swap;src:url(fonts/dm-sans-latin-700-normal.woff2) format("woff2")}
+:root{color-scheme:light;--forest:#0C221B;--forest2:#16352B;--sun:#F4C13A;--cream:#F6F4EA;--sage:#A9C9A4;--sand:#E2D2B8;
+--bg:#F3EBDD;--panel:#F6F4EA;--fg:#0C221B;--muted:#4E5D55;--line:#D9CBB2;--accent:#0C221B;--accent-fg:#F6F4EA;--soft:#DDE8D3;--warn:#8A5A00;--bad:#B3402A;--axis:#9A8F78;--refl:#6B6A5A;--cmuted:#D9CBB2;--popover:#fff;--shadow:0 6px 18px rgba(12,34,27,.16);
+--s1:#16352B;--s2:#F4C13A;--s3:#A9C9A4;--s4:#B66E60;--s5:#B37493;--s6:#5A6F6F;--s7:#E2D2B8;--s8:#4E5D55;
+--color-fg:var(--fg);--color-fg-muted:var(--muted);--color-panel:var(--panel);--color-border-line:var(--line);--color-bg:var(--bg);--color-bad:var(--bad);
+--cds-radius:16px;--cds-pad-xs:6px;--cds-pad-sm:10px;--cds-pad-md:14px;--cds-pad-lg:18px;--cds-gap-xs:6px;--cds-gap-sm:10px;--cds-gap-md:16px;
+--cds-font-size-caption:.8rem;--cds-font-size-body:.95rem;--cds-font-size-heading:1.15rem;--cds-font-weight-medium:600;
+--cds-chart-grid:var(--line);--cds-chart-axis:var(--axis);--cds-chart-reference:var(--refl);--cds-chart-muted:var(--cmuted);--cds-chart-status-critical:var(--bad);
+--cds-surface-popover:var(--popover);--cds-border:var(--line);--cds-shadow-popover:var(--shadow);--cds-text-secondary:var(--muted);--cds-dur-slow:.3s;--cds-ease-out:cubic-bezier(.2,.7,.2,1);
+--display:"Anton","Impact","Arial Narrow",sans-serif;--sans:"DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;--font-anthropic-sans:var(--sans);--font-anthropic-serif:var(--display)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:16px;line-height:1.55;padding:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--forest)}
+.tk-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.tk-stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;min-width:0}
+.tk-stat b{font-family:var(--font-anthropic-serif);font-weight:700;font-size:1.7rem;display:block;line-height:1.1;font-variant-numeric:tabular-nums}
+.tk-stat span{color:var(--muted);font-size:.8rem}
+.tk-bar{height:5px;background:var(--line);border-radius:9px;margin-top:8px;overflow:hidden}.tk-bar i{display:block;height:100%;background:var(--sun)}
+.tk-tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.tk-tools input,.tk-tools select{font:inherit;background:var(--panel);color:var(--fg);border:1px solid var(--line);border-radius:10px;padding:8px 10px;min-width:0}
+.tk-tools input{flex:1 1 180px}
+.tk-chips{display:flex;flex-wrap:wrap;gap:6px}
+.tk-chips button{font:inherit;font-size:.85rem;background:var(--panel);color:var(--fg);border:1px solid var(--line);border-radius:999px;padding:6px 12px;cursor:pointer}
+.tk-chips button[aria-pressed=true]{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
+.tk-list{display:flex;flex-direction:column;gap:8px}
+.tk-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:grid;gap:8px;min-width:0}
+.tk-card.tk-done{background:var(--soft)}
+.tk-top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.tk-nm{font-weight:600;overflow-wrap:anywhere}.tk-meta{color:var(--muted);font-size:.8rem;font-variant-numeric:tabular-nums}
+.tk-checks{display:flex;flex-wrap:wrap;gap:6px}
+.tk-checks label{display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:9px;padding:7px 10px;cursor:pointer;font-size:.88rem;user-select:none}
+.tk-checks input{accent-color:var(--accent);width:17px;height:17px;margin:0}
+.tk-checks label:has(input:checked){background:var(--soft);border-color:var(--accent)}
+.tk-note{font:inherit;font-size:.88rem;width:100%;box-sizing:border-box;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:9px;padding:7px 9px}
+.tk-msg{color:var(--warn);font-size:.85rem;margin:0}
+.tk-empty{color:var(--muted);padding:24px 0;text-align:center}
+.tk-tools button{font:inherit;font-size:.85rem;font-weight:700;background:var(--panel);color:var(--fg);border:1px solid var(--line);border-radius:10px;padding:8px 12px;cursor:pointer}
+.tk-stat b{font-weight:400!important}
+</style>
+<script src="d3.min.js"></script>
+<script>
+(() => {
+  const DATA = {"months": [{"month": "2024-11", "accounts": 147, "active": 40, "group_pv": 7573, "top10_share": 48, "my_pv": 202.75, "my_ogv": 7776, "new_members": null, "gone": null, "comm_eur": 398.48, "frontline": 4, "frontline_active": 3, "label": "nov 24"}, {"month": "2024-12", "accounts": 139, "active": 34, "group_pv": 5074, "top10_share": 55, "my_pv": 129.6, "my_ogv": 5204, "new_members": 2, "gone": 10, "comm_eur": 232.89, "frontline": 4, "frontline_active": 3, "label": "dec 24"}, {"month": "2025-01", "accounts": 136, "active": 38, "group_pv": 5056, "top10_share": 48, "my_pv": 1092.25, "my_ogv": 6148, "new_members": 10, "gone": 13, "comm_eur": 218.18, "frontline": 5, "frontline_active": 4, "label": "jan 25"}, {"month": "2025-02", "accounts": 149, "active": 42, "group_pv": 6020, "top10_share": 50, "my_pv": 257.5, "my_ogv": 6277, "new_members": 17, "gone": 4, "comm_eur": 200.73, "frontline": 5, "frontline_active": 4, "label": "feb 25"}, {"month": "2025-03", "accounts": 168, "active": 34, "group_pv": 4222, "top10_share": 51, "my_pv": 513, "my_ogv": 4735, "new_members": 24, "gone": 5, "comm_eur": 146.39, "frontline": 5, "frontline_active": 3, "label": "mrt 25"}, {"month": "2025-04", "accounts": 162, "active": 38, "group_pv": 5726, "top10_share": 51, "my_pv": 257.2, "my_ogv": 5984, "new_members": 7, "gone": 13, "comm_eur": 159.68, "frontline": 5, "frontline_active": 3, "label": "apr 25"}, {"month": "2025-05", "accounts": 183, "active": 50, "group_pv": 8283, "top10_share": 44, "my_pv": 166, "my_ogv": 8449, "new_members": 30, "gone": 9, "comm_eur": 341.51, "frontline": 5, "frontline_active": 3, "label": "mei 25"}, {"month": "2025-06", "accounts": 196, "active": 51, "group_pv": 7955, "top10_share": 40, "my_pv": 220.5, "my_ogv": 8176, "new_members": 13, "gone": 0, "comm_eur": 264.11, "frontline": 5, "frontline_active": 4, "label": "jun 25"}, {"month": "2025-07", "accounts": 187, "active": 47, "group_pv": 7068, "top10_share": 41, "my_pv": 123.5, "my_ogv": 7191, "new_members": 4, "gone": 13, "comm_eur": 332.48, "frontline": 5, "frontline_active": 3, "label": "jul 25"}, {"month": "2025-08", "accounts": 189, "active": 51, "group_pv": 7224, "top10_share": 41, "my_pv": 149, "my_ogv": 7373, "new_members": 9, "gone": 7, "comm_eur": 236.07, "frontline": 6, "frontline_active": 3, "label": "aug 25"}, {"month": "2025-09", "accounts": 219, "active": 70, "group_pv": 10503, "top10_share": 35, "my_pv": 239.5, "my_ogv": 10742, "new_members": 33, "gone": 3, "comm_eur": 1061.91, "frontline": 7, "frontline_active": 5, "label": "sep 25"}, {"month": "2025-10", "accounts": 240, "active": 65, "group_pv": 9861, "top10_share": 35, "my_pv": 549.2, "my_ogv": 10410, "new_members": 23, "gone": 2, "comm_eur": 1107.71, "frontline": 7, "frontline_active": 4, "label": "okt 25"}, {"month": "2025-11", "accounts": 259, "active": 61, "group_pv": 12268, "top10_share": 44, "my_pv": 134.34, "my_ogv": 12402, "new_members": 22, "gone": 3, "comm_eur": 1241.61, "frontline": 7, "frontline_active": 4, "label": "nov 25"}, {"month": "2025-12", "accounts": 261, "active": 59, "group_pv": 9708, "top10_share": 44, "my_pv": 474, "my_ogv": 10182, "new_members": 17, "gone": 15, "comm_eur": 793.64, "frontline": 9, "frontline_active": 4, "label": "dec 25"}, {"month": "2026-01", "accounts": 280, "active": 63, "group_pv": 10072, "top10_share": 33, "my_pv": 201, "my_ogv": 10273, "new_members": 19, "gone": 0, "comm_eur": 937.04, "frontline": 8, "frontline_active": 5, "label": "jan 26"}, {"month": "2026-02", "accounts": 275, "active": 66, "group_pv": 10981, "top10_share": 36, "my_pv": 139.4, "my_ogv": 11120, "new_members": 6, "gone": 11, "comm_eur": 801.19, "frontline": 8, "frontline_active": 3, "label": "feb 26"}, {"month": "2026-03", "accounts": 283, "active": 68, "group_pv": 9224, "top10_share": 31, "my_pv": 141.2, "my_ogv": 9365, "new_members": 23, "gone": 15, "comm_eur": 487.89, "frontline": 7, "frontline_active": 4, "label": "mrt 26"}, {"month": "2026-04", "accounts": 273, "active": 68, "group_pv": 10794, "top10_share": 33, "my_pv": 120.2, "my_ogv": 10914, "new_members": 7, "gone": 17, "comm_eur": 560.19, "frontline": 7, "frontline_active": 3, "label": "apr 26"}, {"month": "2026-05", "accounts": 279, "active": 64, "group_pv": 9409, "top10_share": 36, "my_pv": 117.5, "my_ogv": 9526, "new_members": 16, "gone": 10, "comm_eur": 431.51, "frontline": 7, "frontline_active": 3, "label": "mei 26"}, {"month": "2026-06", "accounts": 267, "active": 68, "group_pv": 8814, "top10_share": 33, "my_pv": 117, "my_ogv": 8931, "new_members": 8, "gone": 20, "comm_eur": 306.01, "frontline": 9, "frontline_active": 4, "label": "jun 26"}, {"month": "2026-07", "accounts": 248, "active": 53, "group_pv": 7025, "top10_share": 38, "my_pv": 108.5, "my_ogv": 7133, "new_members": 4, "gone": 23, "comm_eur": 284.37, "frontline": 8, "frontline_active": 4, "label": "jul 26"}, {"month": "2026-08", "accounts": 246, "active": 51, "group_pv": 6651, "top10_share": 46, "my_pv": 140, "my_ogv": 6791, "new_members": 2, "gone": 4, "comm_eur": 369.87, "frontline": 8, "frontline_active": 2, "label": "aug 26"}, {"month": "2026-09", "accounts": 244, "active": 51, "group_pv": 7969, "top10_share": 46, "my_pv": 180, "my_ogv": 8149, "new_members": 6, "gone": 8, "comm_eur": 521.23, "frontline": 9, "frontline_active": 4, "label": "sep 26"}, {"month": "2026-10", "accounts": 215, "active": 63, "group_pv": 9208, "top10_share": 35, "my_pv": 212.4, "my_ogv": 9420, "new_members": 8, "gone": 37, "comm_eur": null, "frontline": 8, "frontline_active": 3, "label": "okt 26"}], "cohorts": [{"stage": "Eerste maand", "n2025": 84, "base2025": 205, "n2026": 50, "base2026": 98}, {"stage": "Na 1 maand", "n2025": 58, "base2025": 205, "n2026": 33, "base2026": 90}, {"stage": "Na 3 maanden", "n2025": 41, "base2025": 205, "n2026": 19, "base2026": 82}, {"stage": "Na 6 maanden", "n2025": 32, "base2025": 205, "n2026": 11, "base2026": 54}], "losses": [{"name": "KJEL DEVOGELEER", "level": 2, "months_active": 16, "total_pv": 4071, "last_active": "feb 26", "months_away": 8, "on_list": "nee"}, {"name": "SARAH WIJNS", "level": 1, "months_active": 15, "total_pv": 4039, "last_active": "jan 26", "months_away": 9, "on_list": "ja"}, {"name": "KRISTIEN JONGENS", "level": 2, "months_active": 20, "total_pv": 2152, "last_active": "jul 26", "months_away": 3, "on_list": "nee"}, {"name": "WALTER DECKX", "level": 2, "months_active": 12, "total_pv": 2137, "last_active": "apr 26", "months_away": 6, "on_list": "ja"}, {"name": "DEBBIE CLAUS", "level": 2, "months_active": 18, "total_pv": 1861, "last_active": "apr 26", "months_away": 6, "on_list": "ja"}, {"name": "NATACHA VANDERZEYPEN", "level": 7, "months_active": 12, "total_pv": 1512, "last_active": "okt 25", "months_away": 12, "on_list": "ja"}, {"name": "WINI LYSEN", "level": 3, "months_active": 6, "total_pv": 1349, "last_active": "feb 26", "months_away": 8, "on_list": "ja"}, {"name": "MAGDA BAERT", "level": 9, "months_active": 7, "total_pv": 1282, "last_active": "jul 26", "months_away": 3, "on_list": "nee"}, {"name": "BERTHA LAEREMANS", "level": 3, "months_active": 5, "total_pv": 1119, "last_active": "nov 25", "months_away": 11, "on_list": "ja"}, {"name": "FRASELLE JULIE", "level": 7, "months_active": 4, "total_pv": 1097, "last_active": "feb 25", "months_away": 20, "on_list": "nee"}, {"name": "ELY DAEMS", "level": 4, "months_active": 12, "total_pv": 1049, "last_active": "jun 26", "months_away": 4, "on_list": "nee"}, {"name": "DAAN COVENTS", "level": 2, "months_active": 8, "total_pv": 999, "last_active": "mei 26", "months_away": 5, "on_list": "nee"}, {"name": "WINNI FREDA", "level": 2, "months_active": 4, "total_pv": 990, "last_active": "mei 26", "months_away": 5, "on_list": "ja"}, {"name": "PATRICIA VANDERZEYPEN", "level": 8, "months_active": 14, "total_pv": 946, "last_active": "jun 26", "months_away": 4, "on_list": "nee"}, {"name": "KATRIEN VAN DE VEN", "level": 2, "months_active": 3, "total_pv": 929, "last_active": "dec 25", "months_away": 10, "on_list": "ja"}, {"name": "JOELLE MICHEL", "level": 8, "months_active": 6, "total_pv": 917, "last_active": "nov 25", "months_away": 11, "on_list": "ja"}, {"name": "ELIE DECKERS", "level": 2, "months_active": 3, "total_pv": 854, "last_active": "mrt 26", "months_away": 7, "on_list": "ja"}, {"name": "NICOLE EVERAERT", "level": 4, "months_active": 5, "total_pv": 829, "last_active": "jun 26", "months_away": 4, "on_list": "nee"}, {"name": "DEBBY VAN DEN BERG", "level": 4, "months_active": 7, "total_pv": 819, "last_active": "nov 25", "months_away": 11, "on_list": "ja"}, {"name": "TINNE DE PUYSSELEYR", "level": 6, "months_active": 4, "total_pv": 818, "last_active": "feb 25", "months_away": 20, "on_list": "nee"}, {"name": "STEFAN VAN ROMPAEY", "level": 4, "months_active": 11, "total_pv": 810, "last_active": "mei 26", "months_away": 5, "on_list": "ja"}, {"name": "CHRISTEL VAN ESBROECK", "level": 9, "months_active": 7, "total_pv": 805, "last_active": "jul 26", "months_away": 3, "on_list": "nee"}, {"name": "Daneels Maaike CommV", "level": 3, "months_active": 14, "total_pv": 804, "last_active": "jan 26", "months_away": 9, "on_list": "ja"}, {"name": "EMILIA GIELIS", "level": 2, "months_active": 6, "total_pv": 787, "last_active": "mrt 26", "months_away": 7, "on_list": "ja"}, {"name": "FABIENNE PONCHAU", "level": 8, "months_active": 11, "total_pv": 765, "last_active": "apr 26", "months_away": 6, "on_list": "ja"}], "loss_buckets": [{"bucket": "3 tot 5 maanden", "n": 14}, {"bucket": "6 tot 8 maanden", "n": 11}, {"bucket": "9 tot 11 maanden", "n": 8}, {"bucket": "12 maanden of meer", "n": 12}], "legs": [{"leg": "Virginie De Cocker", "pgv_oct": 3655, "state": "gestopt met de business"}, {"leg": "Julie Vermeulen", "pgv_oct": 2987, "state": "heeft het druk"}, {"leg": "Tolle Covents", "pgv_oct": 2240, "state": "bouwt samen met jou"}, {"leg": "Sarah Wijns", "pgv_oct": 326, "state": "bestelt niet meer"}], "facts": [{"key": "pv_old_level", "value": 6323, "note": "Samen gemiddeld PV per maand van de verloren leden toen ze actief waren"}, {"key": "cand", "value": 62, "note": "Leden op de heractivatielijst"}, {"key": "cand_pv_total", "value": 9642, "note": "Som van hun laatste order in PV"}, {"key": "cand_avg", "value": 155.5, "note": "Gemiddelde laatste order in PV"}, {"key": "silver_ogv", "value": 10000, "note": "Silver: OGV"}, {"key": "silver_leg", "value": 4000, "note": "Silver: OGV per leg"}, {"key": "silver_pgv", "value": 1000, "note": "Silver: PGV"}, {"key": "silver_pv", "value": 100, "note": "Silver: persoonlijk volume"}, {"key": "ogv_done", "value": 871.1, "note": "OGV verwerkt op 3 nov 2026"}, {"key": "ogv_sched", "value": 6221.85, "note": "OGV gepland via autoship"}, {"key": "pgv_done", "value": 871.1, "note": "PGV verwerkt op 3 nov 2026"}, {"key": "pv_sched", "value": 180, "note": "Gepland maandelijks PV"}, {"key": "julie_done", "value": 359.85, "note": "Leg Julie verwerkt"}, {"key": "julie_sched", "value": 2113.65, "note": "Leg Julie gepland"}, {"key": "virginie_done", "value": 259.25, "note": "Leg Virginie verwerkt"}, {"key": "virginie_sched", "value": 2377.4, "note": "Leg Virginie gepland"}, {"key": "tolle_done", "value": 252, "note": "Leg Tolle verwerkt"}, {"key": "tolle_sched", "value": 1352.3, "note": "Leg Tolle gepland"}]};
+  const fns = new Map();
+  const run = (name) => {
+    const f = fns.get(name); if (!f) return;
+    document.querySelectorAll('[data-draw="' + name + '"]').forEach((el) => {
+      if (el.closest('[hidden]')) return;
+      try { f(el); } catch (e) { console.error(name, e); }
+    });
+  };
+  window.dash = {
+    data: (id) => DATA[id] ? { status: 'ok', data: DATA[id], columns: Object.keys(DATA[id][0] || {}) } : { status: 'missing', data: [] },
+    calc: (id, o) => { DATA[id] = o.fn(...o.inputs.map((i) => DATA[i])); },
+    draw: (name, f) => { if (f) fns.set(name, f); else run(name); },
+    redraw: () => fns.forEach((_, n) => run(n)),
+    colors: ['var(--s1)', 'var(--s2)', 'var(--s3)', 'var(--s4)', 'var(--s5)', 'var(--s6)', 'var(--s7)', 'var(--s8)'],
+    setLink: (n) => { try { history.replaceState(null, '', '#' + n); } catch (e) {} },
+    params: () => ({})
+  };
+  let t; addEventListener('resize', () => { clearTimeout(t); t = setTimeout(dash.redraw, 150); });
+})();
+</script>
+<style>
+.jt { max-width: 1040px; margin-inline: auto; font-family: var(--font-anthropic-sans); color: var(--color-fg); }
+.jt h1 { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: 2rem; margin: 0 0 .25rem; text-wrap: balance; }
+.jt h2 { font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); margin: 0 0 var(--cds-gap-xs); }
+.jt h3 { font-size: var(--cds-font-size-body); font-weight: var(--cds-font-weight-medium); margin: 0 0 var(--cds-gap-xs); }
+.jt p, .jt li { line-height: 1.55; max-width: 68ch; }
+.jt .lede { font-size: var(--cds-font-size-heading); color: var(--color-fg-muted); max-width: 62ch; margin: 0 0 var(--cds-gap-md); }
+.jt .muted { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
+.jt b { font-weight: 600; font-variant-numeric: tabular-nums; }
+.jt .tabs { display: flex; flex-wrap: wrap; gap: var(--cds-gap-xs); margin: var(--cds-gap-md) 0; border-bottom: 1px solid var(--color-border-line); padding-bottom: var(--cds-gap-xs); }
+.jt .tabs button { font: inherit; font-size: var(--cds-font-size-body); background: none; border: 1px solid transparent; border-radius: var(--cds-radius); color: var(--color-fg-muted); padding: .35rem .7rem; cursor: pointer; }
+.jt .tabs button[aria-selected=true] { color: var(--color-fg); background: var(--color-panel); border-color: var(--color-border-line); font-weight: 600; }
+.jt section[hidden] { display: none; }
+.jt .page { display: flex; flex-direction: column; gap: var(--cds-gap-md); }
+.jt .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: var(--cds-gap-md); }
+.jt .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); gap: var(--cds-gap-md); }
+.jt .card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); min-width: 0; }
+.jt .kpi .n { font-family: var(--font-anthropic-serif); font-size: 2.2rem; line-height: 1.1; display: block; }
+.jt .kpi .n b { font-weight: 400; }
+.jt .kpi .l { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
+.jt .bad { color: var(--color-bad); }
+.jt ul, .jt ol { margin: .25rem 0 0; padding-left: 1.2rem; }
+.jt li { margin-bottom: .35rem; }
+.jt .chart { position: relative; min-height: 240px; }
+.jt .chart svg { display: block; width: 100%; height: auto; }
+.jt .tt { position: absolute; pointer-events: none; background: var(--cds-surface-popover); border: 1px solid var(--cds-border); border-radius: var(--cds-radius); box-shadow: var(--cds-shadow-popover); padding: var(--cds-pad-xs) var(--cds-pad-sm); font-size: var(--cds-font-size-caption); white-space: nowrap; z-index: 5; }
+.jt .tt .h { color: var(--cds-text-secondary); }
+.jt .tblbox { max-height: 26rem; overflow: auto; border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); }
+.jt table { border-collapse: collapse; width: 100%; font-size: var(--cds-font-size-caption); font-variant-numeric: tabular-nums; }
+.jt th { position: sticky; top: 0; background: var(--color-panel); text-align: left; padding: .45rem .6rem; border-bottom: 1px solid var(--color-border-line); cursor: pointer; white-space: nowrap; user-select: none; }
+.jt td { padding: .4rem .6rem; border-bottom: 1px solid var(--color-border-line); }
+.jt input[type=search], .jt input[type=number] { font: inherit; background: var(--color-bg); color: var(--color-fg); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: .35rem .6rem; }
+.jt input[type=range] { width: 100%; }
+.jt .row { display: flex; flex-wrap: wrap; gap: var(--cds-gap-sm); align-items: center; margin-bottom: var(--cds-gap-sm); }
+.jt .bar { height: .6rem; background: var(--cds-chart-grid); border-radius: 999px; overflow: hidden; margin-top: .3rem; }
+.jt .bar > i { display: block; height: 100%; background: var(--color-fg); }
+.jt .legrow { display: grid; grid-template-columns: minmax(7rem, 11rem) 1fr auto; gap: var(--cds-gap-sm); align-items: center; padding: .3rem 0; font-size: var(--cds-font-size-body); }
+.jt .callout { border-left: 3px solid var(--cds-chart-status-critical); padding: .2rem 0 .2rem var(--cds-pad-md); }
+@media (prefers-reduced-motion: no-preference) { .jt .page { animation: jtin var(--cds-dur-slow) var(--cds-ease-out); } }
+@keyframes jtin { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+</style>
+
+<style>
+.jt{max-width:none!important;margin:0!important}
+.jt h1,.jt h2,.jt h3{font-family:var(--display);font-weight:400!important;text-transform:uppercase;letter-spacing:.01em;line-height:1.05;text-wrap:balance}
+.jt h1{font-size:clamp(56px,14vw,112px)!important;margin:0!important}
+.jt h2{font-size:clamp(26px,5vw,38px)!important;margin:0 0 6px!important}
+.jt h3{font-size:20px!important}
+.jt .hero{position:relative;overflow:hidden;background:var(--forest);color:var(--cream);padding:calc(26px + env(safe-area-inset-top,0px)) max(16px,calc((100% - 960px)/2)) 30px}
+.jt .hero>*{position:relative;z-index:1}
+.jt .hero .brandname{font-weight:700;font-size:13px;letter-spacing:.12em;margin-bottom:14px}
+.jt .hero-row{display:flex;align-items:center;gap:16px;margin-bottom:12px}
+.jt .hero h1 .sun{color:var(--sun)}
+.mark{width:68px;height:68px;border-radius:50%;object-fit:cover;flex:none;box-shadow:0 0 0 2px rgba(244,193,58,.55)}
+.hero-swirl{position:absolute!important;z-index:0!important;right:-150px;top:50%;width:440px;height:440px;margin-top:-220px;border-radius:50%;object-fit:cover;opacity:.5;-webkit-mask-image:radial-gradient(circle,#000 36%,transparent 70%);mask-image:radial-gradient(circle,#000 36%,transparent 70%);pointer-events:none}
+@media (prefers-reduced-motion:no-preference){.hero-swirl{animation:jtspin 90s linear infinite}}
+@keyframes jtspin{to{transform:rotate(360deg)}}
+.jt .hero .lede{color:#CFD5CB;max-width:56ch;margin:0 0 14px;font-size:1rem}
+.jt .hero .lede b{color:var(--cream)}
+.jt .hero .meta{display:flex;flex-wrap:wrap;gap:8px}
+.pill{display:inline-flex;border-radius:999px;padding:5px 12px;font-size:13px;font-weight:700}
+.pill.dark{background:#000;color:var(--cream)}.pill.sunp{background:var(--sun);color:var(--forest)}.pill.ghost{border:1px solid #3B574C;color:var(--cream)}
+.jt .tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;display:flex;flex-wrap:nowrap!important;gap:4px;overflow-x:auto;scrollbar-width:none;margin:0!important;border:0!important;border-top:1px solid #23443A!important;background:var(--forest);padding:8px max(16px,calc((100% - 960px)/2))!important}
+.jt .tabs::-webkit-scrollbar{display:none}
+.jt .tabs button{white-space:nowrap;flex:none;border-radius:999px!important;color:#CFD5CB!important;background:none!important;border:0!important;font-weight:700;padding:8px 14px!important;font-size:14px}
+.jt .tabs button[aria-selected=true]{background:var(--sun)!important;color:var(--forest)!important}
+.jt>section{max-width:960px;margin-inline:auto;padding:28px max(16px,env(safe-area-inset-right,0px)) 56px max(16px,env(safe-area-inset-left,0px))}
+.jt .card{background:var(--cream)!important;border:0!important;border-radius:16px!important}
+.jt .kpi .n{font-family:var(--display);font-size:2.7rem!important;font-weight:400!important;line-height:1}
+.jt .kpi .n b{font-weight:400!important}
+.jt .callout{border-left:5px solid var(--sun)!important}
+.jt .bar>i{background:var(--forest)!important}
+.jt .bad{color:var(--bad)}
+.jt input[type=range]{accent-color:var(--forest)}
+.jt .tblbox{background:var(--cream)}
+.jt th{background:var(--cream)!important}
+[hidden]{display:none!important}
+</style>
+</head><body>
+<div class="jt">
+  <header class="hero"><img class="hero-swirl" src="swirl.jpg" alt=""><div class="brandname">NANDER COVENTS · JOY TEAM</div><div class="hero-row"><img class="mark" src="swirl-small.jpg" alt="Joy Team"><h1>Joy <span class="sun">Team</span></h1></div>
+  <p class="lede">Analyse van de laatste 24 maanden, gelezen uit je backoffice op 3 november 2026. Het volume viel van <b data-draw="v" data-source="ogv_stats" data-row="0" data-field="peak" data-fmt="int">—</b> OGV (<span data-draw="v" data-source="ogv_stats" data-row="0" data-field="peak_label" data-fmt="txt">—</span>) naar <b data-draw="v" data-source="ogv_stats" data-row="0" data-field="now" data-fmt="int">—</b> in oktober. Silver (<b data-draw="v" data-source="facts" data-where="key=silver_ogv" data-field="value" data-fmt="int">—</b> OGV) is deze maand haalbaar, maar alleen als er iets verandert.</p><div class="meta"><span class="pill dark">Stand 3 nov 2026</span><span class="pill sunp">24 maanden</span><span class="pill ghost">Alleen lezen uit je backoffice</span></div></header>
+
+  <nav class="tabs" role="tablist" aria-label="Onderdelen">
+    <button role="tab" data-tab="overzicht" aria-selected="true">Overzicht</button>
+    <button role="tab" data-tab="heract" aria-selected="false">Heractivatie</button>
+    <button role="tab" data-tab="groei" aria-selected="false">Volume en instroom</button>
+    <button role="tab" data-tab="geld" aria-selected="false">Waar je geld mist</button>
+    <button role="tab" data-tab="verloren" aria-selected="false">Wie je verloor</button>
+    <button role="tab" data-tab="dragers" aria-selected="false">Wie draagt het</button>
+    <button role="tab" data-tab="silver" aria-selected="false">Silver en RCD</button>
+    <button role="tab" data-tab="plan" aria-selected="false">Actieplan</button>
+  </nav>
+
+  <section id="overzicht" data-page="overzicht" class="page">
+    <div class="grid">
+      <div class="card kpi"><span class="n"><b data-draw="v" data-source="ogv_stats" data-row="0" data-field="now" data-fmt="int">—</b></span><span class="l">OGV oktober 2026, <span class="bad"><b data-draw="v" data-source="ogv_stats" data-row="0" data-field="drop_pct" data-fmt="pct0">—</b> onder de piek</span></span></div>
+      <div class="card kpi"><span class="n"><b data-draw="v" data-source="comm_stats" data-row="0" data-field="avg_late" data-fmt="eur">—</b></span><span class="l">gemiddelde commissie per maand sinds maart 2026, tegenover <b data-draw="v" data-source="comm_stats" data-row="0" data-field="avg_early" data-fmt="eur">—</b> in de zes maanden ervoor</span></div>
+      <div class="card kpi"><span class="n"><b data-draw="v" data-source="legs_share" data-row="0" data-field="top3_share" data-fmt="pct0">—</b></span><span class="l">van je volume komt uit drie benen</span></div>
+      <div class="card kpi"><span class="n"><b data-draw="v" data-source="enrol_stats" data-row="0" data-field="avg_late" data-fmt="dec1">—</b></span><span class="l">nieuwe accounts per maand (juni tot oktober), tegenover <b data-draw="v" data-source="enrol_stats" data-row="0" data-field="avg_early" data-fmt="dec1">—</b> eind 2025</span></div>
+    </div>
+
+    <div class="card">
+      <h2>Wat er echt aan de hand is</h2>
+      <ol>
+        <li><b>Je organisatie is geen team maar drie lijnen.</b> Virginie bouwt niet meer, Julie heeft het druk. Alleen Tolle bouwt, en dat is je broer. Dat is concentratierisico, geen team.</li>
+        <li><b>De instroom is ingestort.</b> Nieuwe accounts per maand zakten, en van wie wel instapt is na drie maanden nog ongeveer <b data-draw="v" data-source="cohort_rates" data-where="stage=Na 3 maanden" data-field="r2025" data-fmt="pct0">—</b> over (2025-groep).</li>
+        <li><b>Het geld volgt het volume.</b> Sinds maart 2026 daalde je commissie sterk. Waarschijnlijk (hypothese) omdat je groeps-OGV onder de Silver-grens zakte. Dat kun je controleren in je commissie-uitleg.</li>
+        <li><b>Jouw eigen werk zit in content en opvolging, niet in aanspreken en trainen.</b> Dat zeg je zelf. Opvolging houdt mensen warm, maar vult de bovenkant niet.</li>
+        <li><b>Er liggen mensen die terug willen kunnen komen.</b> Er zijn <b data-draw="v" data-source="facts" data-where="key=cand" data-field="value" data-fmt="int">—</b> leden die in aanmerking komen voor Welcome Back in november.</li>
+      </ol>
+    </div>
+
+    <div class="card callout">
+      <h2>De harde conclusie</h2>
+      <p>RCD vraagt <b data-draw="v" data-source="rcd" data-row="0" data-field="rcd_ogv" data-fmt="int">—</b> OGV per maand. Je zit daar op ongeveer <b data-draw="v" data-source="rcd" data-row="0" data-field="factor" data-fmt="int">—</b> keer onder. Met drie tot acht uur per week kom je daar niet met opvolging alleen. De route loopt via duplicatie: een paar mensen die zelf bouwen, en daar al je trainingsuren in steken. Dit is een eerlijke analyse van wat de cijfers laten zien, geen voorspelling.</p>
+    </div>
+  </section>
+
+
+  <section id="heract" data-page="heract" class="page" hidden>
+    <div class="card">
+      <h2>Heractivatie: Welcome Back in november</h2>
+      <p class="muted">De leden die in aanmerking komen voor gratis Thieves-tandpasta en handzeep bij een bestelling van minimaal 50 PV in november. Vink af wat je gedaan hebt. Het blijft bewaard en staat ook op je telefoon.</p>
+    </div>
+    <p class="tk-msg" id="tk-msg" hidden></p>
+    <div class="tk-stats" id="tk-stats"></div>
+    <div class="tk-chips" id="tk-chips"></div>
+    <div class="tk-tools">
+      <input type="search" id="tk-q" placeholder="Zoek op naam" aria-label="Zoek op naam">
+      <select id="tk-sort" aria-label="Sorteren">
+        <option value="last-desc">Recentste order eerst</option>
+        <option value="pv-desc">Hoogste PV eerst</option>
+        <option value="name-asc">Naam A tot Z</option>
+      </select>
+      <button type="button" id="tk-export">Back-up bewaren</button>
+      <button type="button" id="tk-import">Terugzetten</button>
+      <input type="file" id="tk-file" accept="application/json" hidden>
+    </div>
+    <div class="tk-list" id="tk-list"></div>
+  </section>
+
+  <section id="groei" data-page="groei" class="page" hidden>
+    <div class="card">
+      <h2>Groeps-OGV per maand</h2>
+      <p class="muted">Laatste 24 maanden. De stippellijn is de Silver-grens.</p>
+      <div class="chart" data-draw="chart_ogv" data-source="months facts"></div>
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <h2>Nieuwe accounts en verdwenen accounts</h2>
+        <p class="muted">Per maand, in je downline. Verdwenen betekent: een maand eerder in de lijst, nu niet meer.</p>
+        <div class="chart" data-draw="chart_flow" data-source="months"></div>
+      </div>
+      <div class="card">
+        <h2>Hoeveel nieuwe leden blijven</h2>
+        <p class="muted">Aandeel van de instappers dat nog bestelt, per cohort.</p>
+        <div class="chart" data-draw="chart_cohort" data-source="cohort_rates"></div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Wat dit betekent</h2>
+      <ul>
+        <li>Het piekjaar eind 2025 kwam uit een instroomgolf: in september 2025 kwamen <b data-draw="v" data-source="months" data-where="month=2025-09" data-field="new_members" data-fmt="int">—</b> nieuwe accounts binnen. Waar die vandaan kwamen weet ik niet, jij wel.</li>
+        <li>In augustus 2026 kwamen er maar <b data-draw="v" data-source="months" data-where="month=2026-08" data-field="new_members" data-fmt="int">—</b> bij. Zonder instroom kan geen enkele opvolging het volume op peil houden.</li>
+        <li>Zomer is een dip, maar de daling begon al in het voorjaar: augustus 2026 haalde <b data-draw="v" data-source="months" data-where="month=2026-08" data-field="my_ogv" data-fmt="int">—</b> OGV, tegenover <b data-draw="v" data-source="months" data-where="month=2025-08" data-field="my_ogv" data-fmt="int">—</b> in augustus 2025.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="geld" data-page="geld" class="page" hidden>
+    <div class="card">
+      <h2>Commissie per maand</h2>
+      <p class="muted">Uitbetaalde commissie in euro. Oktober is nog niet uitbetaald. De lijnen tonen het gemiddelde voor en na maart 2026.</p>
+      <div class="chart" data-draw="chart_comm" data-source="months comm_stats"></div>
+    </div>
+    <div class="grid">
+      <div class="card kpi"><span class="n"><b data-draw="v" data-source="comm_stats" data-row="0" data-field="avg_early" data-fmt="eur">—</b></span><span class="l">gemiddeld per maand, sep 2025 tot feb 2026</span></div>
+      <div class="card kpi"><span class="n"><b data-draw="v" data-source="comm_stats" data-row="0" data-field="avg_late" data-fmt="eur">—</b></span><span class="l">gemiddeld per maand, mrt tot sep 2026</span></div>
+      <div class="card kpi"><span class="n bad"><b data-draw="v" data-source="comm_stats" data-row="0" data-field="gap_total" data-fmt="eur">—</b></span><span class="l">ruwe kloof over <b data-draw="v" data-source="comm_stats" data-row="0" data-field="months_late" data-fmt="int">—</b> maanden</span></div>
+    </div>
+    <div class="card">
+      <h2>Hoe je dit leest</h2>
+      <ul>
+        <li>De kloof is het gewone verschil tussen twee gemiddelden. Niet alles is te wijten aan één oorzaak: ook minder actieve leden en minder volume in de benen tellen mee.</li>
+        <li>De sterkste hypothese is de Silver-grens van <b data-draw="v" data-source="facts" data-where="key=silver_ogv" data-field="value" data-fmt="int">—</b> OGV. Zakt je groeps-OGV daaronder, dan krijg je minder uit hetzelfde volume. Check dit in je commissie-overzicht voordat je erop bouwt.</li>
+        <li>Wat je wél zeker weet: dezelfde inspanning leverde de laatste zeven maanden veel minder op dan het halfjaar daarvoor.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="verloren" data-page="verloren" class="page" hidden>
+    <div class="card">
+      <h2>Wie je verloor, en hoelang al</h2>
+      <p class="muted">Vijfenveertig leden bestelden ooit goed en zijn nu weg. Hieronder de grootste, gesorteerd op totaal PV. Klik op een kolom om te sorteren.</p>
+      <div class="grid2">
+        <div class="chart" data-draw="chart_buckets" data-source="loss_buckets"></div>
+        <div>
+          <p>De langste afwezigen (<b data-draw="v" data-source="loss_buckets" data-where="bucket=12 maanden of meer" data-field="n" data-fmt="int">—</b> leden twaalf maanden of langer) komen niet terug met een standaardbericht. Zij hebben een persoonlijk gesprek nodig.</p>
+          <p>De recentste groep (drie tot vijf maanden) is het eerst terug te halen: zij hebben je nog in hun hoofd.</p>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <input type="search" data-search="losses" placeholder="Zoek op naam" aria-label="Zoek op naam">
+        <span class="muted">Totaal PV van deze <b data-draw="v" data-source="loss_stats" data-row="0" data-field="count" data-fmt="int">—</b> leden: <b data-draw="v" data-source="loss_stats" data-row="0" data-field="sum_pv" data-fmt="int">—</b></span>
+      </div>
+      <div class="tblbox">
+        <table data-source="losses" data-row-key="name">
+          <thead><tr>
+            <th data-field="name" data-sort="name">Naam</th>
+            <th data-field="level" data-sort="level">Niveau</th>
+            <th data-field="months_active" data-sort="months_active">Maanden actief</th>
+            <th data-field="total_pv" data-sort="total_pv">Totaal PV</th>
+            <th data-field="last_active" data-sort="last_active">Laatst actief</th>
+            <th data-field="months_away" data-sort="months_away">Maanden weg</th>
+            <th data-field="on_list" data-sort="on_list">Op heractivatielijst</th>
+          </tr></thead>
+          <tbody data-draw="tbl_losses_body"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="dragers" data-page="dragers" class="page" hidden>
+    <div class="card">
+      <h2>Wie het volume draagt</h2>
+      <p class="muted">PGV per been in oktober 2026, als aandeel van je groeps-OGV.</p>
+      <div data-draw="legs_list" data-source="legs_share"></div>
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <h2>Wat je hieruit leest</h2>
+        <ul>
+          <li>De drie grootste benen leveren samen <b data-draw="v" data-source="legs_share" data-row="0" data-field="top3_share" data-fmt="pct0">—</b> van je OGV.</li>
+          <li>Het grootste been, Virginie, bouwt niet meer. Dat volume is dus kwetsbaar, geen stabiele basis.</li>
+          <li>Julie heeft het druk. Zij kan geen extra opbouw dragen zonder gericht gesprek.</li>
+          <li>Sarah bestelt niet meer. Wie onder haar staat, bestelt wel, maar dat is één persoon.</li>
+          <li>Tolle bouwt wekelijks. Dat is je enige actieve groeipunt.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h2>Frontlijn</h2>
+        <p class="muted">Hoeveel directe leden, en hoeveel daarvan actief zijn.</p>
+        <div class="chart" data-draw="chart_front" data-source="months"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="silver" data-page="silver" class="page" hidden>
+    <div class="card">
+      <h2>Silver deze maand</h2>
+      <p class="muted">Stand van 3 november 2026: verwerkt plus gepland via autoship. Silver vraagt <b data-draw="v" data-source="facts" data-where="key=silver_ogv" data-field="value" data-fmt="int">—</b> OGV, <b data-draw="v" data-source="facts" data-where="key=silver_leg" data-field="value" data-fmt="int">—</b> OGV in elk van twee benen, en <b data-draw="v" data-source="facts" data-where="key=silver_pgv" data-field="value" data-fmt="int">—</b> PGV.</p>
+      <div class="grid">
+        <div class="card kpi"><span class="n"><b data-draw="v" data-source="silver" data-where="what=Groep" data-field="have" data-fmt="int">—</b></span><span class="l">OGV verwerkt plus gepland</span></div>
+        <div class="card kpi"><span class="n bad"><b data-draw="v" data-source="silver" data-where="what=Groep" data-field="need" data-fmt="int">—</b></span><span class="l">OGV nog nodig bovenop autoship</span></div>
+      </div>
+      <h3>Per been</h3>
+      <div data-draw="silver_legs" data-source="silver"></div>
+      <h3>Scenario: wat als je extra haalt?</h3>
+      <div class="row"><label for="x-extra">Extra OGV deze maand</label><input id="x-extra" type="range" min="0" max="4000" step="50" value="0"><b data-draw="scen_extra">—</b></div>
+      <p data-draw="scen_text" data-source="silver">—</p>
+    </div>
+    <div class="card">
+      <h2>Wat de gaten kosten en wat ze opleveren</h2>
+      <p>Als Julie en Virginie samen hun nodige extra halen, zit je al dicht bij de grens. Eén gesprek met elk van hen is dus meer waard dan tien nieuwe berichten naar vreemden. Dat is een rekensom, geen garantie dat zij het doen.</p>
+    </div>
+    <div class="card">
+      <h2>RCD in perspectief</h2>
+      <p>Je groeps-OGV is nu <b data-draw="v" data-source="rcd" data-row="0" data-field="now_ogv" data-fmt="int">—</b>. RCD vraagt <b data-draw="v" data-source="rcd" data-row="0" data-field="rcd_ogv" data-fmt="int">—</b>. Dat is ongeveer <b data-draw="v" data-source="rcd" data-row="0" data-field="factor" data-fmt="int">—</b> keer zoveel. Een eerlijk tussendoel is dus niet RCD maar het volgende bereikbare rang, met daarachter een team dat zonder jou groeit.</p>
+    </div>
+  </section>
+
+  <section id="plan" data-page="plan" class="page" hidden>
+    <div class="card">
+      <h2>Reactivatie: de snelle winst</h2>
+      <p>Er zijn <b data-draw="v" data-source="facts" data-where="key=cand" data-field="value" data-fmt="int">—</b> leden die in november een gratis Thieves-tandpasta en handzeep kunnen krijgen bij hun bestelling. Hun laatste bestelling was gemiddeld <b data-draw="v" data-source="facts" data-where="key=cand_avg" data-field="value" data-fmt="dec1">—</b> PV.</p>
+      <div class="row"><label for="x-pct">Aandeel dat terugkomt</label><input id="x-pct" type="range" min="0" max="60" step="5" value="15"><b data-draw="scen_pct">—</b></div>
+      <p data-draw="scen_react" data-source="facts">—</p>
+      <p class="muted">Dit is een rekenvoorbeeld op hun laatste ordergrootte. Terugkomende leden bestellen niet automatisch evenveel.</p>
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <h2>Elke week, in volgorde van belang</h2>
+        <ol>
+          <li><b>Aanspreken.</b> Vaste uren per week voor persoonlijke uitnodigingen. Dit is het gat in je werk.</li>
+          <li><b>Eén duplicatiegesprek per week</b> met iemand die kan bouwen: Tolle, Julie, of een nieuwe.</li>
+          <li><b>Reactivatieberichten</b> volgens het plan, in blokken per week.</li>
+          <li><b>Training</b> alleen voor wie zelf wil bouwen, niet voor de hele community.</li>
+          <li><b>Content en opvolging</b> houd je, maar ze krijgen de rest van de tijd.</li>
+        </ol>
+      </div>
+      <div class="card">
+        <h2>Vragen die ik nog van je nodig heb</h2>
+        <ul>
+          <li>Waar kwamen de nieuwe accounts van september tot november 2025 vandaan?</li>
+          <li>Hoeveel persoonlijke uitnodigingen doe je nu echt per week?</li>
+          <li>Wat is de huidige stand van Julie: pauze of structureel?</li>
+          <li>Mag ik de klanten onder Virginie in kaart brengen om te zien wie je zelf kunt opvolgen?</li>
+          <li>Wil je dat ik een wekelijkse Silver-tracker maak?</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Op je telefoon</h2>
+      <ol>
+        <li>Open de link van deze app in Safari (iPhone) of Chrome (Android).</li>
+        <li>iPhone: tik op Deel en kies Zet op beginscherm. Android: open het menu en kies Toevoegen aan startscherm.</li>
+        <li>Je krijgt een snelkoppeling naar de app. Hij blijft bewaren wat je aanvinkt, zolang je bent ingelogd bij Claude.</li>
+      </ol>
+      <p class="muted">Dit is een snelkoppeling, geen app uit de App Store. Hij opent mogelijk met de Claude-balk eromheen.</p>
+    </div>
+    <p class="muted">Bron: gelezen uit je Young Living backoffice (alleen lezen) op 3 november 2026. Cijfers en hypotheses zijn een momentopname, geen uitspraak over Young Living zelf.</p>
+  </section>
+</div>
+
+<script>
+(() => {
+  const FM = {
+    int: (x) => d3.format(',')(Math.round(x)),
+    dec1: (x) => d3.format(',.1f')(x),
+    eur: (x) => '€' + d3.format(',')(Math.round(x)),
+    pct0: (x) => Math.round(x * 100) + '%',
+    txt: (x) => String(x)
+  };
+  const findRow = (el, g) => {
+    if (el.dataset.row != null) return g.data[+el.dataset.row];
+    const w = el.dataset.where;
+    if (!w) return g.data[0];
+    const [k, v] = w.split('=').map(decodeURIComponent);
+    return g.data.find((r) => String(r[k]) === v);
+  };
+  dash.draw('v', (el) => {
+    const g = dash.data(el.dataset.source);
+    if (g.status !== 'ok') return;
+    const row = findRow(el, g);
+    const val = row ? row[el.dataset.field] : null;
+    if (val == null) return;
+    el.textContent = (FM[el.dataset.fmt] || FM.txt)(val);
+  });
+
+  const tabs = Array.from(document.querySelectorAll('.jt [data-tab]'));
+  const pages = Array.from(document.querySelectorAll('.jt [data-page]'));
+  const show = (name) => {
+    tabs.forEach((b) => b.setAttribute('aria-selected', String(b.dataset.tab === name)));
+    pages.forEach((p) => { p.hidden = p.dataset.page !== name; });
+    dash.setLink(name); dash.redraw(); try { localStorage.setItem('jt-tab', name); } catch (e) {}
+  };
+  tabs.forEach((b) => b.addEventListener('click', () => show(b.dataset.tab)));
+  const initial = location.hash.slice(1);
+  let last = null; try { last = localStorage.getItem('jt-tab'); } catch (e) {}
+  const start = initial || last;
+  if (start && tabs.some((b) => b.dataset.tab === start)) show(start);
+
+  // calcs
+  dash.calc('ogv_stats', {
+    title: 'OGV: piek, dal en nu', description: 'Hoogste, laagste en laatste groeps-OGV.',
+    inputs: ['months'],
+    fn: (months) => {
+      const peak = months.reduce((a, b) => (b.my_ogv > a.my_ogv ? b : a));
+      const trough = months.reduce((a, b) => (b.my_ogv < a.my_ogv ? b : a));
+      const now = months[months.length - 1];
+      return [{ peak: peak.my_ogv, peak_label: peak.label, trough: trough.my_ogv, trough_label: trough.label, now: now.my_ogv, drop_pct: (peak.my_ogv - now.my_ogv) / peak.my_ogv }];
+    }
+  });
+  dash.calc('comm_stats', {
+    title: 'Commissie voor en na maart 2026', description: 'Gemiddelden van sep 2025 tot feb 2026 en mrt tot sep 2026, en het verschil.',
+    inputs: ['months'],
+    fn: (months) => {
+      const avg = (a) => a.reduce((s, r) => s + r.comm_eur, 0) / a.length;
+      const early = months.filter((r) => r.month >= '2025-09' && r.month <= '2026-02');
+      const late = months.filter((r) => r.month >= '2026-03' && r.month <= '2026-09');
+      return [{ avg_early: avg(early), avg_late: avg(late), months_late: late.length, gap_total: (avg(early) - avg(late)) * late.length }];
+    }
+  });
+  dash.calc('enrol_stats', {
+    title: 'Nieuwe accounts per maand', description: 'Gemiddelde instroom eind 2025 tegenover juni tot oktober 2026.',
+    inputs: ['months'],
+    fn: (months) => {
+      const avg = (a) => a.reduce((s, r) => s + r.new_members, 0) / a.length;
+      return [{ avg_early: avg(months.filter((r) => r.month >= '2025-09' && r.month <= '2025-12')), avg_late: avg(months.filter((r) => r.month >= '2026-06')) }];
+    }
+  });
+  dash.calc('cohort_rates', {
+    title: 'Retentie per cohort', description: 'Aandeel instappers dat nog bestelt, per moment.',
+    inputs: ['cohorts'],
+    fn: (cohorts) => cohorts.map((c) => ({ stage: c.stage, r2025: c.n2025 / c.base2025, r2026: c.n2026 / c.base2026 }))
+  });
+  dash.calc('loss_stats', {
+    title: 'Verloren leden samengevat', description: 'Aantal en totaal PV van de getoonde verloren leden.',
+    inputs: ['losses'],
+    fn: (losses) => [{ count: losses.length, sum_pv: losses.reduce((s, r) => s + r.total_pv, 0) }]
+  });
+  dash.calc('legs_share', {
+    title: 'Aandeel per been', description: 'PGV per been als aandeel van de OGV van oktober 2026.',
+    inputs: ['legs', 'months'],
+    fn: (legs, months) => {
+      const ogv = months[months.length - 1].my_ogv;
+      const top3 = legs.slice().sort((a, b) => b.pgv_oct - a.pgv_oct).slice(0, 3).reduce((s, r) => s + r.pgv_oct, 0);
+      return legs.map((r) => ({ leg: r.leg, pgv_oct: r.pgv_oct, state: r.state, share: r.pgv_oct / ogv, top3_share: top3 / ogv }));
+    }
+  });
+  dash.calc('rcd', {
+    title: 'RCD tegenover nu', description: 'RCD vraagt 1,5 miljoen OGV; hoeveel keer je huidige groeps-OGV dat is.',
+    inputs: ['months'],
+    fn: (months) => {
+      const now = months[months.length - 1].my_ogv;
+      return [{ rcd_ogv: 1500000, now_ogv: now, factor: 1500000 / now }];
+    }
+  });
+  dash.calc('silver', {
+    title: 'Silver: wat nog ontbreekt', description: 'Silver-grens min verwerkt en gepland, voor de groep en per been.',
+    inputs: ['facts'],
+    fn: (facts) => {
+      const f = Object.fromEntries(facts.map((r) => [r.key, r.value]));
+      const leg = (name, d, s) => ({ what: name, have: d + s, need: Math.max(0, f.silver_leg - d - s), target: f.silver_leg });
+      return [
+        { what: 'Groep', have: f.ogv_done + f.ogv_sched, need: Math.max(0, f.silver_ogv - f.ogv_done - f.ogv_sched), target: f.silver_ogv },
+        leg('Julie', f.julie_done, f.julie_sched),
+        leg('Virginie', f.virginie_done, f.virginie_sched),
+        leg('Tolle', f.tolle_done, f.tolle_sched)
+      ];
+    }
+  });
+
+  // shared chart helpers
+  const tip = (host) => {
+    const t = document.createElement('div'); t.className = 'tt'; t.hidden = true; host.appendChild(t);
+    return {
+      show(ev, html) {
+        const r = host.getBoundingClientRect();
+        t.replaceChildren(); html.forEach((s, i) => { const d = document.createElement('div'); if (i === 0) d.className = 'h'; d.textContent = s; t.appendChild(d); });
+        t.hidden = false;
+        const x = Math.min(ev.clientX - r.left + 10, r.width - t.offsetWidth - 4);
+        t.style.left = Math.max(0, x) + 'px'; t.style.top = Math.max(0, ev.clientY - r.top - 36) + 'px';
+      },
+      hide() { t.hidden = true; }
+    };
+  };
+  const frame = (el, h) => {
+    const w = Math.max(240, el.clientWidth || 320);
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${w} ${h}`).attr('role', 'img');
+    return { svg, w, h };
+  };
+  const axisStyle = (sel) => sel.selectAll('text').attr('font-size', null).attr('font-family', null).attr('fill', 'var(--color-fg-muted)').style('font-size', 'var(--cds-font-size-caption)');
+  const monthAxis = (g, x, labels, w, innerH) => {
+    const step = Math.max(1, Math.ceil(labels.length / Math.max(2, Math.floor(w / 52))));
+    const ax = g.append('g').attr('transform', `translate(0,${innerH})`).call(d3.axisBottom(x).tickValues(labels.filter((_, i) => i % step === 0)).tickSizeOuter(0));
+    ax.selectAll('path,line').attr('stroke', 'var(--cds-chart-axis)'); axisStyle(ax);
+  };
+  const yAxis = (g, y, n, fmt) => {
+    const ax = g.append('g').call(d3.axisLeft(y).ticks(n).tickFormat(fmt || d3.format(',')).tickSize(-0)); 
+    ax.select('.domain').remove(); axisStyle(ax); return ax;
+  };
+  const grid = (g, y, innerW, n) => y.ticks(n).forEach((v) => g.append('line').attr('x1', 0).attr('x2', innerW).attr('y1', y(v)).attr('y2', y(v)).attr('stroke', 'var(--cds-chart-grid)'));
+
+  dash.draw('chart_ogv', (el) => {
+    const m = dash.data('months'), f = dash.data('facts');
+    if (m.status !== 'ok' || f.status !== 'ok') return;
+    el.replaceChildren();
+    const silver = f.data.find((r) => r.key === 'silver_ogv').value;
+    const { svg, w, h } = frame(el, 280);
+    const M = { l: 52, r: 16, t: 14, b: 28 }, iw = w - M.l - M.r, ih = h - M.t - M.b;
+    const g = svg.append('g').attr('transform', `translate(${M.l},${M.t})`);
+    const labels = m.data.map((r) => r.label);
+    const x = d3.scalePoint(labels, [0, iw]).padding(0.2);
+    const y = d3.scaleLinear([0, d3.max(m.data, (r) => r.my_ogv) * 1.1], [ih, 0]).nice();
+    grid(g, y, iw, 5); yAxis(g, y, 5); monthAxis(g, x, labels, w, ih);
+    g.append('line').attr('x1', 0).attr('x2', iw).attr('y1', y(silver)).attr('y2', y(silver)).attr('stroke', 'var(--cds-chart-reference)').attr('stroke-dasharray', '4 4');
+    g.append('text').attr('x', 4).attr('y', y(silver) - 5).attr('fill', 'var(--color-fg-muted)').style('font-size', 'var(--cds-font-size-caption)').text('Silver ' + d3.format(',')(silver));
+    g.append('path').datum(m.data).attr('fill', 'none').attr('stroke', dash.colors[0]).attr('stroke-width', 2).attr('stroke-linecap', 'round').attr('stroke-linejoin', 'round').attr('d', d3.line().x((r) => x(r.label)).y((r) => y(r.my_ogv)));
+    const T = tip(el);
+    g.selectAll('circle.dot').data(m.data).join('circle').attr('class','dot').attr('cx', (r) => x(r.label)).attr('cy', (r) => y(r.my_ogv)).attr('r', 2.5).attr('fill', dash.colors[0]);
+    g.selectAll('circle.hit').data(m.data).join('circle').attr('class', 'hit').attr('cx', (r) => x(r.label)).attr('cy', (r) => y(r.my_ogv)).attr('r', 11).attr('fill', 'transparent')
+      .on('mousemove', (ev, r) => T.show(ev, [r.label, 'OGV ' + d3.format(',')(r.my_ogv), 'Actief ' + r.active])).on('mouseleave', () => T.hide());
+  });
+
+  const bars = (el, rows, cfg) => {
+    const { svg, w, h } = frame(el, cfg.h || 260);
+    const M = { l: 44, r: 12, t: 12, b: 28 }, iw = w - M.l - M.r, ih = h - M.t - M.b;
+    const g = svg.append('g').attr('transform', `translate(${M.l},${M.t})`);
+    const labels = rows.map(cfg.label);
+    const x0 = d3.scaleBand(labels, [0, iw]).padding(0.25);
+    const keys = cfg.series.map((s) => s.key);
+    const x1 = d3.scaleBand(keys, [0, x0.bandwidth()]).padding(0.08);
+    const y = d3.scaleLinear([0, d3.max(rows, (r) => d3.max(cfg.series, (s) => r[s.key] ?? 0)) * 1.12 || 1], [ih, 0]).nice();
+    grid(g, y, iw, 5); yAxis(g, y, 5, cfg.yfmt); monthAxis(g, x0.copy().domain(labels), labels, w, ih);
+    return { g, x0, x1, y, ih, iw, w, rows };
+  };
+
+  dash.draw('chart_comm', (el) => {
+    const m = dash.data('months'), c = dash.data('comm_stats');
+    if (m.status !== 'ok' || c.status !== 'ok') return;
+    el.replaceChildren();
+    const rows = m.data.filter((r) => r.comm_eur != null && r.month >= '2025-09');
+    const b = bars(el, rows, { label: (r) => r.label, series: [{ key: 'comm_eur' }], yfmt: (v) => '€' + d3.format(',')(v), h: 280 });
+    const T = tip(el);
+    b.g.selectAll('rect').data(rows).join('rect').attr('x', (r) => b.x0(r.label)).attr('width', b.x0.bandwidth()).attr('y', (r) => b.y(r.comm_eur)).attr('height', (r) => b.ih - b.y(r.comm_eur)).attr('rx', 3).attr('fill', dash.colors[0])
+      .on('mousemove', (ev, r) => T.show(ev, [r.label, '€' + d3.format(',')(Math.round(r.comm_eur))])).on('mouseleave', () => T.hide());
+    const a = c.data[0], idx = (mm) => rows.findIndex((r) => r.month === mm);
+    const seg = (from, to, val) => {
+      const i0 = idx(from), i1 = idx(to); if (i0 < 0 || i1 < 0) return;
+      b.g.append('line').attr('x1', b.x0(rows[i0].label)).attr('x2', b.x0(rows[i1].label) + b.x0.bandwidth()).attr('y1', b.y(val)).attr('y2', b.y(val)).attr('stroke', 'var(--cds-chart-status-critical)').attr('stroke-width', 2).attr('stroke-dasharray', '5 3');
+    };
+    seg('2025-09', '2026-02', a.avg_early); seg('2026-03', '2026-09', a.avg_late);
+  });
+
+  dash.draw('chart_flow', (el) => {
+    const m = dash.data('months'); if (m.status !== 'ok') return;
+    el.replaceChildren();
+    const rows = m.data.filter((r) => r.new_members != null);
+    const b = bars(el, rows, { label: (r) => r.label, series: [{ key: 'new_members' }, { key: 'gone' }], h: 260 });
+    const T = tip(el), col = [dash.colors[0], 'var(--cds-chart-muted)'];
+    ['new_members', 'gone'].forEach((k, i) => {
+      b.g.selectAll('rect.' + k).data(rows).join('rect').attr('class', k).attr('x', (r) => b.x0(r.label) + b.x1(k)).attr('width', b.x1.bandwidth()).attr('y', (r) => b.y(r[k])).attr('height', (r) => b.ih - b.y(r[k])).attr('rx', 2).attr('fill', col[i])
+        .on('mousemove', (ev, r) => T.show(ev, [r.label, 'Nieuw ' + r.new_members, 'Verdwenen ' + r.gone])).on('mouseleave', () => T.hide());
+    });
+    const lg = b.g.append('g').attr('transform', 'translate(8,-2)');
+    [['Nieuw', col[0]], ['Verdwenen', col[1]]].forEach(([t, c], i) => {
+      lg.append('rect').attr('x', i * 84).attr('y', 0).attr('width', 10).attr('height', 10).attr('rx', 2).attr('fill', c);
+      lg.append('text').attr('x', i * 84 + 14).attr('y', 9).attr('fill', 'var(--color-fg-muted)').style('font-size', 'var(--cds-font-size-caption)').text(t);
+    });
+  });
+
+  dash.draw('chart_cohort', (el) => {
+    const c = dash.data('cohort_rates'); if (c.status !== 'ok') return;
+    el.replaceChildren();
+    const rows = c.data;
+    const { svg, w, h } = frame(el, 260);
+    const M = { l: 44, r: 12, t: 22, b: 40 }, iw = w - M.l - M.r, ih = h - M.t - M.b;
+    const g = svg.append('g').attr('transform', `translate(${M.l},${M.t})`);
+    const x0 = d3.scaleBand(rows.map((r) => r.stage), [0, iw]).padding(0.25);
+    const x1 = d3.scaleBand(['r2025', 'r2026'], [0, x0.bandwidth()]).padding(0.08);
+    const y = d3.scaleLinear([0, 1], [ih, 0]);
+    grid(g, y, iw, 5); yAxis(g, y, 5, d3.format('.0%'));
+    const ax = g.append('g').attr('transform', `translate(0,${ih})`).call(d3.axisBottom(x0).tickSizeOuter(0).tickFormat((d) => d.replace('Eerste maand', 'Start').replace('Na ', '').replace(' maanden', ' mnd').replace(' maand', ' mnd'))); ax.selectAll('path,line').attr('stroke', 'var(--cds-chart-axis)'); axisStyle(ax);
+    const T = tip(el), col = { r2025: 'var(--cds-chart-muted)', r2026: dash.colors[0] };
+    ['r2025', 'r2026'].forEach((k) => g.selectAll('rect.' + k).data(rows).join('rect').attr('class', k).attr('x', (r) => x0(r.stage) + x1(k)).attr('width', x1.bandwidth()).attr('y', (r) => y(r[k])).attr('height', (r) => ih - y(r[k])).attr('rx', 3).attr('fill', col[k])
+      .on('mousemove', (ev, r) => T.show(ev, [r.stage, (k === 'r2025' ? 'Instappers 2025: ' : 'Instappers 2026: ') + Math.round(r[k] * 100) + '%'])).on('mouseleave', () => T.hide()));
+    const lg = g.append('g').attr('transform', 'translate(8,-16)');
+    [['Groep 2025', col.r2025], ['Groep 2026', col.r2026]].forEach(([t, c], i) => {
+      lg.append('rect').attr('x', i * 96).attr('y', 0).attr('width', 10).attr('height', 10).attr('rx', 2).attr('fill', c);
+      lg.append('text').attr('x', i * 96 + 14).attr('y', 9).attr('fill', 'var(--color-fg-muted)').style('font-size', 'var(--cds-font-size-caption)').text(t);
+    });
+  });
+
+  dash.draw('chart_front', (el) => {
+    const m = dash.data('months'); if (m.status !== 'ok') return;
+    el.replaceChildren();
+    const rows = m.data;
+    const { svg, w, h } = frame(el, 240);
+    const M = { l: 36, r: 14, t: 14, b: 28 }, iw = w - M.l - M.r, ih = h - M.t - M.b;
+    const g = svg.append('g').attr('transform', `translate(${M.l},${M.t})`);
+    const labels = rows.map((r) => r.label);
+    const x = d3.scalePoint(labels, [0, iw]).padding(0.2);
+    const y = d3.scaleLinear([0, d3.max(rows, (r) => r.frontline) + 1], [ih, 0]).nice();
+    grid(g, y, iw, 4); yAxis(g, y, 4); monthAxis(g, x, labels, w, ih);
+    const T = tip(el);
+    [['frontline', dash.colors[0]], ['frontline_active', 'var(--cds-chart-muted)']].forEach(([k, c]) => {
+      g.append('path').datum(rows).attr('fill', 'none').attr('stroke', c).attr('stroke-width', 2).attr('stroke-linecap', 'round').attr('d', d3.line().x((r) => x(r.label)).y((r) => y(r[k])));
+    });
+    g.selectAll('circle').data(rows).join('circle').attr('cx', (r) => x(r.label)).attr('cy', (r) => y(r.frontline)).attr('r', 10).attr('fill', 'transparent')
+      .on('mousemove', (ev, r) => T.show(ev, [r.label, 'Frontlijn ' + r.frontline, 'Waarvan actief ' + r.frontline_active])).on('mouseleave', () => T.hide());
+    const lg = g.append('g').attr('transform', 'translate(8,-4)');
+    [['Frontlijn', dash.colors[0]], ['Actief', 'var(--cds-chart-muted)']].forEach(([t, c], i) => {
+      lg.append('rect').attr('x', i * 78).attr('y', 0).attr('width', 10).attr('height', 3).attr('fill', c);
+      lg.append('text').attr('x', i * 78 + 14).attr('y', 6).attr('fill', 'var(--color-fg-muted)').style('font-size', 'var(--cds-font-size-caption)').text(t);
+    });
+  });
+
+  dash.draw('chart_buckets', (el) => {
+    const d = dash.data('loss_buckets'); if (d.status !== 'ok') return;
+    el.replaceChildren();
+    const rows = d.data, { svg, w, h } = frame(el, 220);
+    const M = { l: 120, r: 30, t: 6, b: 6 }, iw = w - M.l - M.r, ih = h - M.t - M.b;
+    const g = svg.append('g').attr('transform', `translate(${M.l},${M.t})`);
+    const y = d3.scaleBand(rows.map((r) => r.bucket), [0, ih]).padding(0.3);
+    const x = d3.scaleLinear([0, d3.max(rows, (r) => r.n)], [0, iw]);
+    const ax = g.append('g').call(d3.axisLeft(y).tickSize(0)); ax.select('.domain').remove(); axisStyle(ax);
+    const T = tip(el);
+    g.selectAll('rect').data(rows).join('rect').attr('x', 0).attr('y', (r) => y(r.bucket)).attr('width', (r) => x(r.n)).attr('height', y.bandwidth()).attr('rx', 3).attr('fill', dash.colors[0])
+      .on('mousemove', (ev, r) => T.show(ev, [r.bucket, r.n + ' leden'])).on('mouseleave', () => T.hide());
+    g.selectAll('text.v').data(rows).join('text').attr('class', 'v').attr('x', (r) => x(r.n) + 6).attr('y', (r) => y(r.bucket) + y.bandwidth() / 2 + 4).attr('fill', 'var(--color-fg)').style('font-size', 'var(--cds-font-size-caption)').text((r) => r.n);
+  });
+
+  // lost members table
+  let sortKey = 'total_pv', sortDir = -1, q = '';
+  const NUM = ['level', 'months_active', 'total_pv', 'months_away'];
+  dash.draw('tbl_losses_body', (tb) => {
+    const d = dash.data('losses'); if (d.status !== 'ok') return;
+    const rows = d.data.filter((r) => r.name.toLowerCase().includes(q)).sort((a, b) => {
+      const A = a[sortKey], B = b[sortKey];
+      return (NUM.includes(sortKey) ? A - B : String(A).localeCompare(String(B))) * sortDir;
+    });
+    tb.replaceChildren();
+    rows.forEach((r) => {
+      const tr = document.createElement('tr'); tr.dataset.key = r.name;
+      [r.name, r.level, r.months_active, d3.format(',')(r.total_pv), r.last_active, r.months_away, r.on_list].forEach((v) => { const td = document.createElement('td'); td.textContent = v; tr.appendChild(td); });
+      tb.appendChild(tr);
+    });
+  });
+  document.querySelectorAll('.jt th[data-sort]').forEach((th) => th.addEventListener('click', () => {
+    const k = th.dataset.sort; sortDir = k === sortKey ? -sortDir : (NUM.includes(k) ? -1 : 1); sortKey = k;
+    document.querySelectorAll('.jt th[data-sort]').forEach((o) => o.setAttribute('aria-sort', o === th ? (sortDir === 1 ? 'ascending' : 'descending') : 'none'));
+    dash.draw('tbl_losses_body');
+  }));
+  document.querySelectorAll('.jt input[data-search]').forEach((i) => i.addEventListener('input', () => { q = i.value.trim().toLowerCase(); dash.draw('tbl_losses_body'); }));
+
+  // legs
+  dash.draw('legs_list', (el) => {
+    const d = dash.data('legs_share'); if (d.status !== 'ok') return;
+    el.replaceChildren();
+    d.data.slice().sort((a, b) => b.pgv_oct - a.pgv_oct).forEach((r) => {
+      const row = document.createElement('div'); row.className = 'legrow';
+      const n = document.createElement('div'); const nm = document.createElement('b'); nm.textContent = r.leg; const st = document.createElement('div'); st.className = 'muted'; st.textContent = r.state; n.append(nm, st);
+      const bar = document.createElement('div'); bar.className = 'bar'; const fill = document.createElement('i'); fill.style.width = Math.round(r.share * 100) + '%'; bar.appendChild(fill);
+      const v = document.createElement('div'); v.textContent = d3.format(',')(r.pgv_oct) + ' PGV · ' + Math.round(r.share * 100) + '%';
+      row.append(n, bar, v); el.appendChild(row);
+    });
+  });
+
+  // silver per leg
+  dash.draw('silver_legs', (el) => {
+    const d = dash.data('silver'); if (d.status !== 'ok') return;
+    el.replaceChildren();
+    d.data.filter((r) => r.what !== 'Groep').forEach((r) => {
+      const row = document.createElement('div'); row.className = 'legrow';
+      const n = document.createElement('b'); n.textContent = r.what;
+      const bar = document.createElement('div'); bar.className = 'bar'; const fill = document.createElement('i'); fill.style.width = Math.min(100, Math.round(r.have / r.target * 100)) + '%'; bar.appendChild(fill);
+      const v = document.createElement('div'); v.textContent = r.need > 0 ? 'nog ' + d3.format(',')(Math.round(r.need)) + ' nodig' : 'gehaald';
+      row.append(n, bar, v); el.appendChild(row);
+    });
+  });
+
+  const extra = document.getElementById('x-extra'), pct = document.getElementById('x-pct');
+  dash.draw('scen_extra', (el) => { el.textContent = d3.format(',')(+(extra ? extra.value : 0)); });
+  dash.draw('scen_pct', (el) => { el.textContent = (pct ? pct.value : 0) + '%'; });
+  dash.draw('scen_text', (el) => {
+    const d = dash.data('silver'); if (d.status !== 'ok') return;
+    const g = d.data.find((r) => r.what === 'Groep'); const x = +(extra ? extra.value : 0);
+    const left = Math.max(0, g.need - x);
+    el.textContent = left === 0 ? 'Met ' + d3.format(',')(x) + ' extra OGV zit je op of boven de groepsgrens. Controleer daarna nog de benen en je PGV.' : 'Met ' + d3.format(',')(x) + ' extra OGV mis je nog ' + d3.format(',')(Math.round(left)) + ' OGV voor de groepsgrens.';
+  });
+  dash.draw('scen_react', (el) => {
+    const d = dash.data('facts'); if (d.status !== 'ok') return;
+    const f = Object.fromEntries(d.data.map((r) => [r.key, r.value]));
+    const p = +(pct ? pct.value : 0) / 100, back = Math.round(f.cand * p), pv = Math.round(back * f.cand_avg);
+    const s = dash.data('silver'); const need = s.status === 'ok' ? s.data.find((r) => r.what === 'Groep').need : null;
+    el.textContent = back + ' leden bestellen weer, samen ongeveer ' + d3.format(',')(pv) + ' PV' + (need ? ', tegenover ' + d3.format(',')(Math.round(need)) + ' OGV die je deze maand nog mist voor Silver.' : '.');
+  });
+  [extra, pct].forEach((i) => i && i.addEventListener('input', () => { dash.draw('scen_extra'); dash.draw('scen_pct'); dash.draw('scen_text'); dash.draw('scen_react'); }));
+})();
+</script>
+
+<script>
+(() => {
+  const PEOPLE = [{"id": "41451165", "name": "JUDIT MIKÓ", "last": "2026-05-28", "pv": 102.7}, {"id": "39441464", "name": "WINNI FREDA", "last": "2026-05-23", "pv": 48.0}, {"id": "41491930", "name": "RENILDE GEENEN", "last": "2026-05-21", "pv": 182.2}, {"id": "41483121", "name": "ELS VERMEEREN", "last": "2026-05-14", "pv": 78.5}, {"id": "40892441", "name": "STEFAN VAN ROMPAEY", "last": "2026-05-13", "pv": 76.5}, {"id": "41435041", "name": "LIEN PEETERS", "last": "2026-05-11", "pv": 207.5}, {"id": "41427972", "name": "GAËLLE LELOUX", "last": "2026-05-03", "pv": 83.0}, {"id": "29588313", "name": "WENDY FEYS", "last": "2026-04-29", "pv": 506.9}, {"id": "40074777", "name": "WALTER DECKX", "last": "2026-04-27", "pv": 269.0}, {"id": "31306903", "name": "DEBBIE CLAUS", "last": "2026-04-24", "pv": 80.0}, {"id": "39409631", "name": "ANDERS STRAETMANS", "last": "2026-04-23", "pv": 45.0}, {"id": "39182696", "name": "TJORVEN BEULEN", "last": "2026-04-18", "pv": 60.5}, {"id": "41299914", "name": "ANITA KOHNEN", "last": "2026-04-15", "pv": 83.0}, {"id": "40823220", "name": "FABIENNE PONCHAU", "last": "2026-04-09", "pv": 67.0}, {"id": "41428151", "name": "ALICIA FILÉE", "last": "2026-04-02", "pv": 117.0}, {"id": "41420834", "name": "ELLEN BEECKMANS", "last": "2026-03-30", "pv": 65.5}, {"id": "41421000", "name": "LINDA MOERMAN", "last": "2026-03-29", "pv": 129.0}, {"id": "18282778", "name": "BRIGITTE FRANSEN", "last": "2026-03-29", "pv": 268.0}, {"id": "41243945", "name": "MARILYN LAMBOTTE", "last": "2026-03-24", "pv": 55.0}, {"id": "41124517", "name": "ANJA BELIËN", "last": "2026-03-23", "pv": 129.0}, {"id": "41297608", "name": "MARIANNE VANDENLINDENLOO", "last": "2026-03-13", "pv": 54.0}, {"id": "40034660", "name": "ELIE DECKERS", "last": "2026-03-10", "pv": 520.0}, {"id": "41294513", "name": "ALICE DELCOMMUNE", "last": "2026-03-10", "pv": 218.0}, {"id": "40992559", "name": "EMILIA GIELIS", "last": "2026-03-09", "pv": 128.5}, {"id": "41203146", "name": "Nine Van der Plancke", "last": "2026-03-07", "pv": 123.0}, {"id": "39150798", "name": "WINI LYSEN", "last": "2026-02-28", "pv": 415.2}, {"id": "41280000", "name": "EMELINE OLAERTS", "last": "2026-02-27", "pv": 145.0}, {"id": "41272222", "name": "JENNIFER COUGNET", "last": "2026-02-21", "pv": 49.0}, {"id": "41153964", "name": "PETRA LAJTAI", "last": "2026-02-17", "pv": 284.65}, {"id": "41130107", "name": "ENIKŐ BUDAI", "last": "2026-02-11", "pv": 150.0}, {"id": "39885148", "name": "ANNELIES PEETERS", "last": "2026-02-05", "pv": 341.25}, {"id": "41241654", "name": "CRIST'L VICTOR", "last": "2026-01-29", "pv": 123.9}, {"id": "41241485", "name": "ANJA EGGHE", "last": "2026-01-29", "pv": 235.0}, {"id": "41241449", "name": "CONNY EGGHE", "last": "2026-01-29", "pv": 222.5}, {"id": "38596031", "name": "Daneels Maaike CommV", "last": "2026-01-26", "pv": 52.0}, {"id": "39956292", "name": "ILSE VAN LANDEGHEM", "last": "2026-01-25", "pv": 106.0}, {"id": "41176310", "name": "LIEVE ALLAERTS", "last": "2026-01-16", "pv": 97.5}, {"id": "22636694", "name": "SARAH WIJNS", "last": "2026-01-09", "pv": 32.0}, {"id": "39162438", "name": "KATRIEN VAN DE VEN", "last": "2025-12-27", "pv": 289.5}, {"id": "39750813", "name": "THOMAS PIETTE", "last": "2025-12-08", "pv": 60.5}, {"id": "41155617", "name": "NATHALIE ROUSSEL", "last": "2025-12-04", "pv": 117.0}, {"id": "39018818", "name": "BÉATRICE DEWEER", "last": "2025-11-30", "pv": 60.0}, {"id": "1993136", "name": "HUYSMANS, SUZY", "last": "2025-11-29", "pv": 205.5}, {"id": "41128698", "name": "KELLY SCHEURWEGHS", "last": "2025-11-27", "pv": 104.0}, {"id": "41127397", "name": "CHRISTINA VERHAEGEN", "last": "2025-11-24", "pv": 123.55}, {"id": "41055740", "name": "KARIN LENAERTS", "last": "2025-11-24", "pv": 401.4}, {"id": "40794331", "name": "DEBBY VAN DEN BERG", "last": "2025-11-24", "pv": 149.0}, {"id": "40797168", "name": "JOELLE MICHEL", "last": "2025-11-24", "pv": 162.0}, {"id": "41124236", "name": "SOFIE HERMANS", "last": "2025-11-22", "pv": 391.0}, {"id": "22188543", "name": "AN DE WOLF", "last": "2025-11-19", "pv": 100.6}, {"id": "41114950", "name": "PHAEDRA VANOPPEN", "last": "2025-11-19", "pv": 104.3}, {"id": "39740885", "name": "CHARLOTTE VER EECKE", "last": "2025-11-16", "pv": 186.9}, {"id": "39483769", "name": "BERTHA LAEREMANS", "last": "2025-11-16", "pv": 400.4}, {"id": "40823169", "name": "MARIE DELABY", "last": "2025-11-13", "pv": 54.0}, {"id": "41086061", "name": "LAURA CAPIAU", "last": "2025-11-05", "pv": 14.5}, {"id": "41068745", "name": "NADIA DELHAZE", "last": "2025-10-29", "pv": 129.0}, {"id": "41008745", "name": "BILAL HAMMAD", "last": "2025-10-22", "pv": 100.0}, {"id": "39756673", "name": "NATACHA VANDERZEYPEN", "last": "2025-10-21", "pv": 38.0}, {"id": "2988519", "name": "KLEIN - DE JONG, ANITA", "last": "2025-10-21", "pv": 103.0}, {"id": "39713967", "name": "ANN MEYVIS", "last": "2025-10-15", "pv": 74.5}, {"id": "40992715", "name": "CAROLINE GHYSSAERT", "last": "2025-10-11", "pv": 269.5}, {"id": "40912396", "name": "JOKE VERELST", "last": "2025-10-09", "pv": 53.0}];
+  const STEPS = [["contacted","Gecontacteerd"],["reminded","Herinnerd"],["ordered","Besteld in november"],["thanked","Bedankt"]];
+  const FILTERS = [["all","Iedereen"],["todo","Nog niet benaderd"],["waiting","Wacht op reactie"],["ordered","Besteld, nog bedanken"],["done","Klaar"]];
+  const state = new Map(), chain = new Map();
+  let db = null, filter = "all", q = "", sortKey = "last-desc", loaded = false;
+  const $ = (id) => document.getElementById(id);
+  const fmtDate = (x) => x.split("-").reverse().join("-");
+  const get = (id) => state.get(id) || {};
+  const showMsg = (t) => { const m = $("tk-msg"); if (m) { m.hidden = false; m.textContent = t; } };
+  const KEY = "jt-heract-v1";
+  function persist() { try { localStorage.setItem(KEY, JSON.stringify(Object.fromEntries(state))); } catch (e) { showMsg("Opslaan lukt niet op dit toestel."); } }
+  function save(id, patch) {
+    const next = Object.assign({contacted:false,reminded:false,ordered:false,thanked:false,note:""}, get(id), patch);
+    state.set(id, next); persist(); render();
+  }
+  function stage(p) {
+    const s = get(p.id);
+    if (s.thanked) return "done";
+    if (s.ordered) return "ordered";
+    if (s.contacted || s.reminded) return "waiting";
+    return "todo";
+  }
+  function render() {
+    const st = $("tk-stats"); if (!st) return;
+    const total = PEOPLE.length;
+    st.replaceChildren();
+    STEPS.forEach(([k, l]) => {
+      const n = PEOPLE.filter((p) => get(p.id)[k]).length;
+      const d = document.createElement("div"); d.className = "tk-stat";
+      const b = document.createElement("b"); b.textContent = n + " / " + total;
+      const sp = document.createElement("span"); sp.textContent = l;
+      const bar = document.createElement("div"); bar.className = "tk-bar";
+      const i = document.createElement("i"); i.style.width = Math.round(n / total * 100) + "%"; bar.appendChild(i);
+      d.append(b, sp, bar); st.appendChild(d);
+    });
+    const ch = $("tk-chips"); ch.replaceChildren();
+    FILTERS.forEach(([k, l]) => {
+      const n = k === "all" ? total : PEOPLE.filter((p) => stage(p) === k).length;
+      const b = document.createElement("button"); b.type = "button"; b.textContent = l + " (" + n + ")"; b.setAttribute("aria-pressed", String(filter === k));
+      b.onclick = () => { filter = k; render(); }; ch.appendChild(b);
+    });
+    const ae = document.activeElement;
+    if (ae && ae.dataset && ae.dataset.noteFor) return;
+    const rows = PEOPLE.filter((p) => (filter === "all" || stage(p) === filter) && p.name.toLowerCase().includes(q));
+    const [key, dir] = sortKey.split("-");
+    rows.sort((a, b) => { const A = a[key], B = b[key]; const c = typeof A === "number" ? A - B : String(A).localeCompare(String(B)); return dir === "desc" ? -c : c; });
+    const list = $("tk-list"); list.replaceChildren();
+    if (!rows.length) { const e = document.createElement("div"); e.className = "tk-empty"; e.textContent = loaded ? "Niemand in deze selectie." : "Laden..."; list.appendChild(e); return; }
+    rows.forEach((p) => list.appendChild(card(p)));
+  }
+  function card(p) {
+    const s = get(p.id);
+    const c = document.createElement("div"); c.className = "tk-card" + (s.thanked ? " tk-done" : "");
+    const top = document.createElement("div"); top.className = "tk-top";
+    const nm = document.createElement("div"); nm.className = "tk-nm"; nm.textContent = p.name;
+    const meta = document.createElement("div"); meta.className = "tk-meta";
+    meta.textContent = "Laatste order " + fmtDate(p.last) + " · " + p.pv.toLocaleString("nl-BE", { maximumFractionDigits: 1 }) + " PV · ID " + p.id;
+    top.append(nm, meta);
+    const checks = document.createElement("div"); checks.className = "tk-checks";
+    STEPS.forEach(([k, l]) => {
+      const lab = document.createElement("label"); const inp = document.createElement("input"); inp.type = "checkbox"; inp.checked = !!s[k];
+      inp.onchange = () => save(p.id, { [k]: inp.checked });
+      const t = document.createElement("span"); t.textContent = l; lab.append(inp, t); checks.appendChild(lab);
+    });
+    const note = document.createElement("input"); note.className = "tk-note"; note.type = "text"; note.placeholder = "Notitie";
+    note.value = s.note || ""; note.dataset.noteFor = p.id; note.setAttribute("aria-label", "Notitie bij " + p.name);
+    let timer = null;
+    note.oninput = () => { clearTimeout(timer); timer = setTimeout(() => save(p.id, { note: note.value }), 700); };
+    note.onblur = () => { clearTimeout(timer); if (note.value !== (get(p.id).note || "")) save(p.id, { note: note.value }); else render(); };
+    c.append(top, checks, note);
+    return c;
+  }
+  $("tk-q").oninput = (e) => { q = e.target.value.trim().toLowerCase(); render(); };
+  $("tk-sort").onchange = (e) => { sortKey = e.target.value; render(); };
+  try { const raw = localStorage.getItem(KEY); if (raw) Object.entries(JSON.parse(raw)).forEach(([k, v]) => state.set(k, v)); } catch (e) {}
+  loaded = true;
+  $("tk-export").onclick = () => {
+    const blob = new Blob([JSON.stringify(Object.fromEntries(state), null, 1)], { type: "application/json" });
+    const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "joy-team-heractivatie-backup.json";
+    document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  };
+  $("tk-import").onclick = () => $("tk-file").click();
+  $("tk-file").onchange = async (e) => {
+    const f = e.target.files[0]; if (!f) return;
+    try {
+      const o = JSON.parse(await f.text());
+      Object.entries(o).forEach(([k, v]) => { if (PEOPLE.some((p) => p.id === k) && v && typeof v === "object") state.set(k, { contacted: !!v.contacted, reminded: !!v.reminded, ordered: !!v.ordered, thanked: !!v.thanked, note: String(v.note || "").slice(0, 500) }); });
+      persist(); render(); showMsg("Back-up teruggezet.");
+    } catch (err) { showMsg("Dit bestand is geen geldige back-up."); }
+    e.target.value = "";
+  };
+  render();
+  dash.redraw();
+})();
+</script>
+
+<script>if("serviceWorker" in navigator){addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}))}</script>
+</body></html>
